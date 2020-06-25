@@ -9,8 +9,7 @@ angular.module('portainer.app').controller('CreateStackController', [
   'FormValidator',
   'ResourceControlService',
   'FormHelper',
-  'EndpointProvider',
-  function ($scope, $state, StackService, Authentication, Notifications, FormValidator, ResourceControlService, FormHelper, EndpointProvider) {
+  function ($scope, $state, StackService, Authentication, Notifications, FormValidator, ResourceControlService, FormHelper) {
     $scope.formValues = {
       Name: '',
       StackFileContent: '',
@@ -54,7 +53,7 @@ angular.module('portainer.app').controller('CreateStackController', [
 
     function createSwarmStack(name, method) {
       var env = FormHelper.removeInvalidEnvVars($scope.formValues.Env);
-      var endpointId = EndpointProvider.endpointID();
+      const endpointId = $scope.endpointId;
 
       if (method === 'editor') {
         var stackFileContent = $scope.formValues.StackFileContent;
@@ -77,7 +76,7 @@ angular.module('portainer.app').controller('CreateStackController', [
 
     function createComposeStack(name, method) {
       var env = FormHelper.removeInvalidEnvVars($scope.formValues.Env);
-      var endpointId = EndpointProvider.endpointID();
+      const endpointId = $scope.endpointId;
 
       if (method === 'editor') {
         var stackFileContent = $scope.formValues.StackFileContent;
@@ -132,7 +131,7 @@ angular.module('portainer.app').controller('CreateStackController', [
         })
         .then(function success() {
           Notifications.success('Stack successfully deployed');
-          $state.go('portainer.stacks');
+          $state.go('portainer.stacks', { endpointId: $scope.endpointId });
         })
         .catch(function error(err) {
           Notifications.error('Deployment error', err, 'Unable to deploy stack');
@@ -147,6 +146,7 @@ angular.module('portainer.app').controller('CreateStackController', [
     };
 
     function initView() {
+      $scope.endpointId = +$state.params.endpointId;
       var endpointMode = $scope.applicationState.endpoint.mode;
       $scope.state.StackType = 2;
       if (endpointMode.provider === 'DOCKER_SWARM_MODE' && endpointMode.role === 'MANAGER') {
