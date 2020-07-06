@@ -131,7 +131,7 @@ angular.module('portainer.app').controller('CreateStackController', [
         })
         .then(function success() {
           Notifications.success('Stack successfully deployed');
-          $state.go('portainer.stacks', { endpointId: $scope.endpointId });
+          $state.go('docker.stacks', { endpointId: $scope.endpointId });
         })
         .catch(function error(err) {
           Notifications.error('Deployment error', err, 'Unable to deploy stack');
