@@ -482,6 +482,17 @@ angular.module('portainer.docker', ['portainer.app']).config([
       },
     };
 
+    var templates = {
+      name: 'docker.templates',
+      url: '/templates',
+      views: {
+        'content@': {
+          templateUrl: '~Portainer/views/templates/templates.html',
+          controller: 'TemplatesController',
+        },
+      },
+    };
+
     $stateRegistryProvider.register(configs);
     $stateRegistryProvider.register(config);
     $stateRegistryProvider.register(configCreation);
@@ -527,5 +538,6 @@ angular.module('portainer.docker', ['portainer.app']).config([
     $stateRegistryProvider.register(volume);
     $stateRegistryProvider.register(volumeBrowse);
     $stateRegistryProvider.register(volumeCreation);
+    $stateRegistryProvider.register(templates);
   },
 ]);
